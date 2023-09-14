@@ -1,11 +1,43 @@
 let activePile = 0;
 let activeNumber = 0;
 
-function setActivePile(id) {
+function removeActivePile() {
   if (activePile) {
     const oldPileWrapper = document.getElementById(`pile-${activePile}`);
     oldPileWrapper.classList.remove("active-pile");
   }
+
+  activePile = 0;
+}
+
+function removeActiveNumber() {
+  if (activeNumber) {
+    const oldSelector = document.getElementById(`number-${activeNumber}`);
+    oldSelector.classList.remove("active-number-selector");
+  }
+  activeNumber = 0;
+}
+
+function disableSelectors() {
+  const selectors = document.getElementById("number-selectors");
+  for (const selNum in selectors.children) {
+    const sel = selectors.children[selNum];
+    sel.disabled = true;
+  }
+}
+
+function takeStones() {
+  const pile = document.getElementById(`pile-${activePile}`).children[1];
+  for (let i = 0; i < activeNumber; i++) {
+    pile.removeChild(pile.children[0]);
+  }
+  removeActiveNumber();
+  removeActivePile();
+  disableSelectors();
+}
+
+function setActivePile(id) {
+  removeActivePile();
 
   const pileWrapper = document.getElementById(`pile-${id}`);
   pileWrapper.classList.add("active-pile");
@@ -21,10 +53,7 @@ function setActivePile(id) {
 }
 
 function setActiveNumber(num) {
-  if (activeNumber) {
-    const oldSelector = document.getElementById(`number-${activeNumber}`);
-    oldSelector.classList.remove("active-number-selector");
-  }
+  removeActiveNumber();
 
   const selector = document.getElementById(`number-${num}`);
   selector.classList.add("active-number-selector");
