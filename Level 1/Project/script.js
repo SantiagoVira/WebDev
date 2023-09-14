@@ -59,6 +59,26 @@ function takeStones() {
     pileWrapper.classList.add("disabled");
   }
 
+  let remainingMessage;
+  switch (pile.children.length) {
+    case 0:
+      remainingMessage = "There are no stones left in that pile.";
+      break;
+    case 1:
+      remainingMessage = "There is 1 stone left in that pile.";
+      break;
+    case 2:
+      remainingMessage = "There are 2 stones left in that pile.";
+      break;
+  }
+
+  sendMessage(
+    "Game",
+    `You took ${activeNumber} stone${
+      activeNumber > 1 ? "s" : ""
+    } from Pile ${activePile}! ${remainingMessage}`
+  );
+
   removeActiveNumber();
   removeActivePile();
   disableSelectors();
@@ -91,4 +111,10 @@ function setActiveNumber(num) {
 
   const takeButton = document.getElementById("take");
   takeButton.disabled = false;
+}
+
+function sendMessage(sender, msg) {
+  const dialogueBox = document.getElementById("dialogue");
+  dialogueBox.innerHTML =
+    `<p><b>${sender}: </b>${msg}</p>` + dialogueBox.innerHTML;
 }
