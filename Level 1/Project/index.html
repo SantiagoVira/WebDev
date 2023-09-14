@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="./styles.css"
+  <title>Goblin Game</title>
+</head>
+<body>
+  <script src="script.js"></script>
+  <div class="piles">
+    <div class="pile-wrapper" id="pile-1" onclick="setActivePile(1)">
+      <h3>Pile 1</h3>
+      <div class="pile">
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+      </div>
+    </div>
+    <div class="pile-wrapper" id="pile-2" onclick="setActivePile(2)">
+      <h3>Pile 2</h3>
+      <div class="pile">
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+      </div>
+    </div>
+    <div class="pile-wrapper" id="pile-3" onclick="setActivePile(3)">
+      <h3>Pile 3</h3>
+      <div class="pile">
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="number-selectors">
+    <button class="number-selector number-1" id="number-1" onclick="setActiveNumber(1);">1</button>
+    <button class="number-selector number-2" id="number-2" onclick="setActiveNumber(2);">2</button>
+    <button class="number-selector number-3" id="number-3" onclick="setActiveNumber(3);">3</button>
+  </div>
+  
+  
+</body>
+</html>
