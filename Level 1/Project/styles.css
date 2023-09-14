@@ -91,9 +91,10 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: min(30rem, 80%);
 }
 .number-selector {
-  width: 10rem;
+  flex: 1;
   padding: 0.65rem;
   color: var(--text);
   border: 2px solid var(--text);
@@ -113,6 +114,15 @@ h1 {
   border-right: 2px solid var(--text);
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+}
+
+/* Dialogue Section */
+.dialogue {
+  width: min(30rem, 80%);
+  min-height: 6rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--text);
 }
 
 /* Buttons */
