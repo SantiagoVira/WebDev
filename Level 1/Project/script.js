@@ -29,4 +29,7 @@ function setActiveNumber(num) {
   const selector = document.getElementById(`number-${num}`);
   selector.classList.add("active-number-selector");
   activeNumber = num;
+
+  const takeButton = document.getElementById("take");
+  takeButton.disabled = false;
 }
