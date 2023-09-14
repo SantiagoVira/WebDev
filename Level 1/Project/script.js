@@ -26,18 +26,31 @@ function disableSelectors() {
   }
 }
 
+function disableTakeButton() {
+  const takeButton = document.getElementById("take");
+  takeButton.disabled = true;
+}
+
 function takeStones() {
-  const pile = document.getElementById(`pile-${activePile}`).children[1];
+  const pileWrapper = document.getElementById(`pile-${activePile}`);
+  const pile = pileWrapper.children[1];
   for (let i = 0; i < activeNumber; i++) {
     pile.removeChild(pile.children[0]);
   }
+
+  if (pile.children.length === 0) {
+    pileWrapper.classList.add("disabled");
+  }
+
   removeActiveNumber();
   removeActivePile();
   disableSelectors();
+  disableTakeButton();
 }
 
 function setActivePile(id) {
   removeActivePile();
+  disableSelectors();
 
   const pileWrapper = document.getElementById(`pile-${id}`);
   pileWrapper.classList.add("active-pile");
