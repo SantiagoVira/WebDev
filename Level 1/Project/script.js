@@ -31,6 +31,23 @@ function disableTakeButton() {
   takeButton.disabled = true;
 }
 
+function resetGame() {
+  removeActiveNumber();
+  removeActivePile();
+  disableSelectors();
+  disableTakeButton();
+
+  for (let pileNum = 1; pileNum < 4; pileNum++) {
+    const pileWrapper = document.getElementById(`pile-${pileNum}`);
+    if (pileWrapper.classList.contains("disabled"))
+      pileWrapper.classList.remove("disabled");
+    const pile = pileWrapper.children[1];
+    pile.innerHTML = `<div class="stone"></div>
+    <div class="stone"></div>
+    <div class="stone"></div>`;
+  }
+}
+
 function takeStones() {
   const pileWrapper = document.getElementById(`pile-${activePile}`);
   const pile = pileWrapper.children[1];

@@ -1,9 +1,10 @@
 :root {
   --text: #ffdf87;
+  --bg: #282828;
 }
 
 body {
-  background-color: #282828;
+  background-color: var(--bg);
   color: var(--text);
 
   display: flex;
@@ -114,40 +115,45 @@ h1 {
   border-bottom-right-radius: 0.5rem;
 }
 
-/* Take Button */
+/* Buttons */
 .take {
+  background-color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: var(--bg);
+  border: 2px solid var(--text);
+}
+.reset {
   background-color: transparent;
   border: 2px solid var(--text);
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   color: var(--text);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Hover and Disabled Effects */
 
-.pile-wrapper:hover,
-.number-selector:hover,
-.take:hover {
+.pile-wrapper:hover:not(.active-pile):not(.disabled),
+.number-selector:hover:enabled:not(.active-number-selector),
+.reset:hover:enabled {
   background-color: color-mix(in srgb, var(--text) 5%, transparent);
+}
+.take:hover:enabled {
+  background-color: color-mix(in srgb, var(--text) 90%, transparent);
 }
 
 .active-pile,
-.active-pile:hover,
 .active-number-selector,
-.active-number-selector:hover,
-.take:active {
+.reset:active {
   background-color: color-mix(in srgb, var(--text) 10%, transparent);
+}
+.take:hover:active {
+  background-color: color-mix(in srgb, var(--text) 80%, transparent);
 }
 
 .number-selector:disabled,
 .pile-wrapper.disabled,
+.reset:disabled,
 .take:disabled {
   opacity: 0.3;
-}
-.number-selector:disabled:hover,
-.pile-wrapper.disabled:hover,
-.take:disabled:hover {
-  background-color: transparent;
 }
