@@ -104,3 +104,12 @@ h3 {
 .active-number-selector:hover {
   background-color: color-mix(in srgb, var(--text) 10%, transparent);
 }
+
+.number-selector:disabled,
+.pile-wrapper.disabled {
+  opacity: 0.3;
+}
+.number-selector:disabled:hover,
+.pile-wrapper.disabled:hover {
+  background-color: transparent;
+}
