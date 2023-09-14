@@ -3,13 +3,21 @@ let activeNumber = 0;
 
 function setActivePile(id) {
   if (activePile) {
-    const oldPile = document.getElementById(`pile-${activePile}`);
-    oldPile.classList.remove("active-pile");
+    const oldPileWrapper = document.getElementById(`pile-${activePile}`);
+    oldPileWrapper.classList.remove("active-pile");
   }
 
-  const pile = document.getElementById(`pile-${id}`);
-  pile.classList.add("active-pile");
+  const pileWrapper = document.getElementById(`pile-${id}`);
+  pileWrapper.classList.add("active-pile");
   activePile = id;
+
+  const selectors = document.getElementById("number-selectors");
+  for (const selNum in selectors.children) {
+    const sel = selectors.children[selNum];
+    if (pileWrapper.children[1].childElementCount >= parseInt(sel.innerHTML)) {
+      sel.disabled = false;
+    }
+  }
 }
 
 function setActiveNumber(num) {

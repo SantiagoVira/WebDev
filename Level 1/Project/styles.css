@@ -37,15 +37,24 @@ h3 {
   border: 2px solid var(--text);
 }
 
-.stone:nth-child(1) {
+.stone:first-child:nth-last-child(2),
+.stone:first-child:nth-last-child(2) ~ .stone:nth-child(1) {
   grid-column: 1 / span 2;
 }
-.stone:nth-child(2) {
+
+.stone:first-child:nth-last-child(2) ~ .stone:nth-child(2) {
   grid-column: 3 / span 2;
 }
-.stone:nth-child(3),
+
+.stone:nth-child(1),
 .stone:only-child {
   grid-column: 2 / span 2;
+}
+.stone:nth-child(2) {
+  grid-column: 1 / span 2;
+}
+.stone:nth-child(3) {
+  grid-column: 3 / span 2;
 }
 
 .pile-wrapper {
