@@ -33,6 +33,18 @@ function disableTakeButton() {
   takeButton.disabled = true;
 }
 
+function togglePilesActive() {
+  const piles = document.getElementById("piles");
+  piles.childNodes.forEach((e) => {
+    if (e.nodeName === "DIV") {
+      if (e.children[1].children.length > 0) {
+        if (e.classList.contains("disabled")) e.classList.remove("disabled");
+        else e.classList.add("disabled");
+      }
+    }
+  });
+}
+
 function resetGame() {
   removeActiveNumber();
   removeActivePile();
@@ -55,7 +67,7 @@ function resetGame() {
   startGame();
 }
 
-function takeStones() {
+async function takeStones() {
   const pileWrapper = document.getElementById(`pile-${activePile}`);
   const pile = pileWrapper.children[1];
   for (let i = 0; i < activeNumber; i++) {
@@ -87,15 +99,18 @@ function takeStones() {
     } from Pile ${activePile}! ${remainingMessage}`
   );
 
-  // disable all piles
+  togglePilesActive();
 
   removeActiveNumber();
   removeActivePile();
   disableSelectors();
   disableTakeButton();
 
-  //send message from unK why bad move
-  //wait
+  await wait();
+  //send random message from unK why bad move
+  sendMessage("unK", "Ha, you have made a critical error!");
+  await wait();
+  await goblinTurn();
 }
 
 function setActivePile(id) {
@@ -132,13 +147,59 @@ function sendMessage(sender, msg) {
     `<p><b>${sender}: </b>${msg}</p>` + dialogueBox.innerHTML;
 }
 
-function goblinTurn() {
-  // choose which thing to do
-  // remove the stones
-  // send message from game
-  // check if all piles empty
-  // wait
-  // send message from unK
+async function goblinTurn() {
+  const piles = document.getElementById("piles");
+  const order = [];
+  piles.childNodes.forEach((e) => {
+    if (e.nodeName === "DIV") {
+      order.push([e.children[1].children.length, order.length + 1]);
+    }
+  });
+  order.sort((valA, valB) => valA[0] - valB[0]); // smallest first, [amt stones, pile num]
+
+  const choosesSmallest = Math.random() * 10 < 1;
+  let choice = order[2][1];
+
+  for (let pair in order) {
+    if ((choosesSmallest && pair[0] > 0) || pair[0] === 1) {
+      choice = pair[1];
+    }
+  }
+
+  const pileWrapper = document.getElementById(`pile-${choice}`);
+  const pile = pileWrapper.children[1];
+  pile.removeChild(pile.children[0]);
+
+  if (pile.children.length === 0) {
+    pileWrapper.classList.add("disabled");
+    // Check if all piles r empty
+  }
+
+  let remainingMessage;
+  switch (pile.children.length) {
+    case 0:
+      remainingMessage = "There are no stones left in that pile.";
+      break;
+    case 1:
+      remainingMessage = "There is 1 stone left in that pile.";
+      break;
+    case 2:
+      remainingMessage = "There are 2 stones left in that pile.";
+      break;
+  }
+
+  sendMessage(
+    "Game",
+    `The goblins took 1 stone from Pile ${choice}! ${remainingMessage}`
+  );
+  await wait(1);
+
+  //create random messages
+  sendMessage(
+    "unK",
+    "glooB made this move because of the obvious tactical advantage of this stone"
+  );
+  await wait();
   if (firstRound) {
     sendMessage(
       "unK",
@@ -146,7 +207,7 @@ function goblinTurn() {
     );
     firstRound = false;
   }
-  // enable all piles that arent empty
+  togglePilesActive();
 }
 
 function wait(seconds = 3) {
@@ -167,7 +228,7 @@ async function startGame() {
   sendMessage("unK", "We will go first.");
   await wait(1);
 
-  goblinTurn();
+  await goblinTurn();
 }
 
 async function endGame() {

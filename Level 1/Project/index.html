@@ -8,8 +8,8 @@
   <body onload="startGame()">
     <script src="script.js"></script>
     <h1>stoNe gaMe</h1>
-    <div class="piles">
-      <div class="pile-wrapper" id="pile-1" onclick="setActivePile(1)">
+    <div class="piles" id="piles">
+      <div class="pile-wrapper disabled" id="pile-1" onclick="setActivePile(1)">
         <h3>Pile 1</h3>
         <div class="pile">
           <div class="stone"></div>
@@ -17,7 +17,7 @@
           <div class="stone"></div>
         </div>
       </div>
-      <div class="pile-wrapper" id="pile-2" onclick="setActivePile(2)">
+      <div class="pile-wrapper disabled" id="pile-2" onclick="setActivePile(2)">
         <h3>Pile 2</h3>
         <div class="pile">
           <div class="stone"></div>
@@ -25,7 +25,7 @@
           <div class="stone"></div>
         </div>
       </div>
-      <div class="pile-wrapper" id="pile-3" onclick="setActivePile(3)">
+      <div class="pile-wrapper disabled" id="pile-3" onclick="setActivePile(3)">
         <h3>Pile 3</h3>
         <div class="pile">
           <div class="stone"></div>
