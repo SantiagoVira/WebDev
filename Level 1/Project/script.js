@@ -71,6 +71,7 @@ function resetGame() {
   removeActivePile();
   disableSelectors();
   disableTakeButton();
+  setPilesActive(false);
   firstRound = true;
 
   document.getElementById("dialogue").innerHTML = "";
@@ -129,7 +130,7 @@ async function takeStones() {
 
   await wait();
   //send random message from unK why bad move
-  sendMessage("unK", "Ha, you have made a critical error!");
+  sendMessage("unK", getRandomMessage(1));
   await wait();
   await goblinTurn();
 }
@@ -219,10 +220,7 @@ async function goblinTurn() {
   await wait(1);
 
   //create random messages
-  sendMessage(
-    "unK",
-    "glooB made this move because of the obvious tactical advantage of this stone"
-  );
+  sendMessage("unK", getRandomMessage(0));
   await wait();
   if (firstRound) {
     sendMessage(
@@ -263,10 +261,67 @@ async function endGame() {
       : "unK and glooB are the winners of this round!"
   );
   await wait();
-  sendMessage(
-    "unK",
-    winner === 1
-      ? "Psh... that was a warmup round, we are obviously still the reigning champs"
-      : "Ha! Winners again, but better luck next time... not!!"
-  );
+  // random messges
+  sendMessage("unK", winner === 1 ? getRandomMessage(2) : getRandomMessage(3));
 }
+
+function getRandomMessage(scenario) {
+  const options = messages[scenario];
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+// their move, user move, their loss, their win
+const messages = [
+  [
+    "glooB made this move because of the obvious tactical advantage of this stone",
+    "Oh, that last move, pure goblin genius! We set the stage for your downfall!",
+    "I see your strategy unravel with every stone we take. We're unstoppable!",
+    "The goblins' brilliance shines through each stone we chose. It's our game!",
+    "You fell right into our trap! That move was a masterstroke of strategy!",
+    "Behold the finesse of the goblins! Our moves are flawless, unmatched!",
+    "With every stone we pick, your hopes crumbled. We're the stoNe gaMe kings!",
+    "Did you see that? Our move was like a goblin ballet, graceful and unbeatable!",
+    "We led you into a labyrinth of stones, and you couldn't escape! Pure genius!",
+    "The goblin cunning prevails once again! Our move are clearly leaving you baffled!",
+    "You didn't see this coming. Our move was as mysterious as the goblin moon.",
+  ],
+  [
+    "Ha, you have made a critical error!",
+    "Oh dear, that move was a blunder! You walked right into our web.",
+    "That move was like a gift to us! You practically handed over the victory.",
+    "That move was a catastrophe. The goblins are clearly superior.",
+    "Did you even think before making that move? It was laughably bad!",
+    "That move was so predictable, it's almost sad. Goblins always outsmart humans.",
+    "We saw that coming a mile away! Your move was a feeble attempt to stop us.",
+    "You played right into our hands! Our victory is inevitable.",
+    "In the world of goblins, that move was equivalent to surrender.",
+    "A rookie mistake! You clearly don't understand the stoNe gaMe.",
+    "That move was a blight on the history of the stoNe gaMe. Goblins rule!",
+  ],
+  [
+    "Psh... that was a warmup round, we are obviously still the reigning champs",
+    "Well, that was unexpected, but it's just a minor setback!",
+    "Losing? Nah, we just wanted to give you a chance to feel good.",
+    "Goblins sometimes take the scenic route to victory. We'll get there!",
+    "A tiny hiccup on our path to dominance. We'll bounce back!",
+    "Losing once is just a lesson in humility. The goblins remain strong!",
+    "Our defeat was a mere illusion. Next time, you won't be so lucky!",
+    "A temporary lapse in our goblin greatness. Watch us rise again!",
+    "You can celebrate now, but you won't enjoy it for long!",
+    "A momentary slip, but the goblins are still the masters of the stoNe gaMe!",
+    "We will let you savor this rare victory. It won't happen again!",
+  ],
+  [
+    "Ha! Winners again, but better luck next time... not!!",
+    "Oh, what a surprise! We won. Who saw that coming?",
+    "Congratulations on being the second-best stoNe gaMe players in the room!",
+    "We won, obviously. It's a goblin thing, you wouldn't understand.",
+    "Better luck next time, if there's even a next time for you.",
+    "You really thought you could beat us? That's cute.",
+    "We're just too good for you. Maybe practice more...or not.",
+    "A valiant effort, but in the end, goblins always prevail.",
+    "We won because we're goblins, and you're...well, not goblins.",
+    "Don't feel too bad about losing. It happens to the best of non-goblins.",
+    "We're just on a different level. Maybe stick to easier games next time.",
+  ],
+];
