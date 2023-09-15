@@ -1,5 +1,7 @@
 let activePile = 0;
 let activeNumber = 0;
+let firstRound = true;
+let winner = 0; // 1 player won, 2 goblins won
 
 function removeActivePile() {
   if (activePile) {
@@ -36,6 +38,9 @@ function resetGame() {
   removeActivePile();
   disableSelectors();
   disableTakeButton();
+  firstRound = true;
+
+  document.getElementById("dialogue").innerHTML = "";
 
   for (let pileNum = 1; pileNum < 4; pileNum++) {
     const pileWrapper = document.getElementById(`pile-${pileNum}`);
@@ -46,6 +51,8 @@ function resetGame() {
     <div class="stone"></div>
     <div class="stone"></div>`;
   }
+
+  startGame();
 }
 
 function takeStones() {
@@ -57,6 +64,7 @@ function takeStones() {
 
   if (pile.children.length === 0) {
     pileWrapper.classList.add("disabled");
+    // Check if all piles r empty
   }
 
   let remainingMessage;
@@ -79,10 +87,15 @@ function takeStones() {
     } from Pile ${activePile}! ${remainingMessage}`
   );
 
+  // disable all piles
+
   removeActiveNumber();
   removeActivePile();
   disableSelectors();
   disableTakeButton();
+
+  //send message from unK why bad move
+  //wait
 }
 
 function setActivePile(id) {
@@ -123,8 +136,17 @@ function goblinTurn() {
   // choose which thing to do
   // remove the stones
   // send message from game
+  // check if all piles empty
   // wait
   // send message from unK
+  if (firstRound) {
+    sendMessage(
+      "unK",
+      "Now its your turn, select your pile and how many you want to take."
+    );
+    firstRound = false;
+  }
+  // enable all piles that arent empty
 }
 
 function wait(seconds = 3) {
@@ -135,7 +157,7 @@ function wait(seconds = 3) {
   });
 }
 
-async function playGame() {
+async function startGame() {
   await wait(1);
   sendMessage(
     "unK",
@@ -145,13 +167,21 @@ async function playGame() {
   sendMessage("unK", "We will go first.");
   await wait(1);
 
-  while (false) {
-    goblinTurn();
-    //if first time, say "now its ur turn, select your pile and how many you wnat to take"
-    //somehow await taking stones
-    //send message from unK why bad move
-    //wait
-  }
-  //send message from game saying who won
-  //send message from unK why better
+  goblinTurn();
+}
+
+async function endGame() {
+  sendMessage(
+    "Game",
+    winner === 1
+      ? "Congratulations! You are the winner of this round of stoNe gaMe!"
+      : "unK and glooB are the winners of this round!"
+  );
+  await wait();
+  sendMessage(
+    "unK",
+    winner === 1
+      ? "Psh... that was a warmup round, we are obviously still the reigning champs"
+      : "Ha! Winners again, but better luck next time... not!!"
+  );
 }
