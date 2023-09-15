@@ -33,16 +33,37 @@ function disableTakeButton() {
   takeButton.disabled = true;
 }
 
-function togglePilesActive() {
+function setPilesActive(active) {
   const piles = document.getElementById("piles");
   piles.childNodes.forEach((e) => {
     if (e.nodeName === "DIV") {
       if (e.children[1].children.length > 0) {
-        if (e.classList.contains("disabled")) e.classList.remove("disabled");
-        else e.classList.add("disabled");
+        if (e.classList.contains("disabled") && active)
+          e.classList.remove("disabled");
+        else if (!e.classList.contains("disabled") && !active)
+          e.classList.add("disabled");
       }
     }
   });
+}
+
+function checkGameOver(potentialWinner) {
+  let isOver = true;
+  const piles = document.getElementById("piles");
+  piles.childNodes.forEach((e) => {
+    if (e.nodeName === "DIV") {
+      console.log();
+      if (e.children[1].children.length > 0) {
+        isOver = false;
+        return;
+      }
+    }
+  });
+  if (!isOver) return false;
+
+  winner = potentialWinner;
+  endGame();
+  return true;
 }
 
 function resetGame() {
@@ -76,7 +97,7 @@ async function takeStones() {
 
   if (pile.children.length === 0) {
     pileWrapper.classList.add("disabled");
-    // Check if all piles r empty
+    if (checkGameOver(2)) return;
   }
 
   let remainingMessage;
@@ -99,7 +120,7 @@ async function takeStones() {
     } from Pile ${activePile}! ${remainingMessage}`
   );
 
-  togglePilesActive();
+  setPilesActive(false);
 
   removeActiveNumber();
   removeActivePile();
@@ -114,6 +135,8 @@ async function takeStones() {
 }
 
 function setActivePile(id) {
+  if (document.getElementById(`pile-${id}`).classList.contains("disabled"))
+    return;
   removeActivePile();
   disableSelectors();
 
@@ -144,7 +167,7 @@ function setActiveNumber(num) {
 function sendMessage(sender, msg) {
   const dialogueBox = document.getElementById("dialogue");
   dialogueBox.innerHTML =
-    `<p><b>${sender}: </b>${msg}</p>` + dialogueBox.innerHTML;
+    `<p><b>${sender}:</b> ${msg}</p>` + dialogueBox.innerHTML;
 }
 
 async function goblinTurn() {
@@ -160,9 +183,10 @@ async function goblinTurn() {
   const choosesSmallest = Math.random() * 10 < 1;
   let choice = order[2][1];
 
-  for (let pair in order) {
+  for (pair of order) {
     if ((choosesSmallest && pair[0] > 0) || pair[0] === 1) {
       choice = pair[1];
+      break;
     }
   }
 
@@ -172,7 +196,7 @@ async function goblinTurn() {
 
   if (pile.children.length === 0) {
     pileWrapper.classList.add("disabled");
-    // Check if all piles r empty
+    if (checkGameOver(1)) return;
   }
 
   let remainingMessage;
@@ -207,7 +231,7 @@ async function goblinTurn() {
     );
     firstRound = false;
   }
-  togglePilesActive();
+  setPilesActive(true);
 }
 
 function wait(seconds = 3) {
