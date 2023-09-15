@@ -118,3 +118,40 @@ function sendMessage(sender, msg) {
   dialogueBox.innerHTML =
     `<p><b>${sender}: </b>${msg}</p>` + dialogueBox.innerHTML;
 }
+
+function goblinTurn() {
+  // choose which thing to do
+  // remove the stones
+  // send message from game
+  // wait
+  // send message from unK
+}
+
+function wait(seconds = 3) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("resolved");
+    }, seconds * 1000);
+  });
+}
+
+async function playGame() {
+  await wait(1);
+  sendMessage(
+    "unK",
+    "Welcome to our stoNe gaMe! Be sure you know how to play, me and glooB are the best in the business!"
+  );
+  await wait();
+  sendMessage("unK", "We will go first.");
+  await wait(1);
+
+  while (false) {
+    goblinTurn();
+    //if first time, say "now its ur turn, select your pile and how many you wnat to take"
+    //somehow await taking stones
+    //send message from unK why bad move
+    //wait
+  }
+  //send message from game saying who won
+  //send message from unK why better
+}
