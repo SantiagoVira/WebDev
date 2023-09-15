@@ -1,3 +1,5 @@
+// Reseting multiple times breaks stuff, goblins take 2
+
 let activePile = 0;
 let activeNumber = 0;
 let firstRound = true;
@@ -35,13 +37,20 @@ function disableTakeButton() {
 
 function setPilesActive(active) {
   const piles = document.getElementById("piles");
+  console.log(piles.childNodes, active);
   piles.childNodes.forEach((e) => {
     if (e.nodeName === "DIV") {
+      console.log(e.children[1].children.length);
       if (e.children[1].children.length > 0) {
-        if (e.classList.contains("disabled") && active)
+        if (e.classList.contains("disabled") && active) {
+          console.log("bad");
           e.classList.remove("disabled");
-        else if (!e.classList.contains("disabled") && !active)
+        }
+        if (!active) {
+          console.log(piles.childNodes, e.classList);
           e.classList.add("disabled");
+          console.log(e.classList);
+        }
       }
     }
   });
@@ -67,19 +76,19 @@ function checkGameOver(potentialWinner) {
 }
 
 function resetGame() {
+  stopTimeouts();
+  setPilesActive(false);
+
   removeActiveNumber();
   removeActivePile();
   disableSelectors();
   disableTakeButton();
-  setPilesActive(false);
   firstRound = true;
 
   document.getElementById("dialogue").innerHTML = "";
 
   for (let pileNum = 1; pileNum < 4; pileNum++) {
     const pileWrapper = document.getElementById(`pile-${pileNum}`);
-    if (pileWrapper.classList.contains("disabled"))
-      pileWrapper.classList.remove("disabled");
     const pile = pileWrapper.children[1];
     pile.innerHTML = `<div class="stone"></div>
     <div class="stone"></div>
@@ -254,6 +263,12 @@ async function startGame() {
 }
 
 async function endGame() {
+  disableSelectors();
+  disableTakeButton();
+  removeActiveNumber();
+  removeActivePile();
+  setPilesActive(false);
+
   sendMessage(
     "Game",
     winner === 1
@@ -268,6 +283,14 @@ async function endGame() {
 function getRandomMessage(scenario) {
   const options = messages[scenario];
   return options[Math.floor(Math.random() * options.length)];
+}
+
+function stopTimeouts() {
+  const highestId = window.setTimeout(() => {
+    for (let i = highestId; i >= 0; i--) {
+      window.clearInterval(i);
+    }
+  }, 0);
 }
 
 // their move, user move, their loss, their win
