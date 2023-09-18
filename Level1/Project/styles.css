@@ -32,7 +32,8 @@
 
 .stone {
   width: 1.5rem;
-  height: 0.6rem;
+  max-width: 3vw;
+  aspect-ratio: 2.5;
   border-bottom-left-radius: 90%;
   border-bottom-right-radius: 90%;
   border-top-right-radius: 70%;
