@@ -1,0 +1,441 @@
+<html lang="en">
+  <head>
+    <title>Goblin Game</title>
+    <script>
+      // Reseting multiple times breaks stuff, goblins take 2
+
+      let activePile = 0;
+      let activeNumber = 0;
+      let firstRound = true;
+      let winner = 0; // 1 player won, 2 goblins won
+
+      function removeActivePile() {
+        if (activePile) {
+          const oldPileWrapper = document.getElementById(`pile-${activePile}`);
+          oldPileWrapper.classList.remove("active-pile");
+        }
+
+        activePile = 0;
+      }
+
+      function removeActiveNumber() {
+        if (activeNumber) {
+          const oldSelector = document.getElementById(`number-${activeNumber}`);
+          oldSelector.classList.remove("active-number-selector");
+        }
+        activeNumber = 0;
+      }
+
+      function disableSelectors() {
+        const selectors = document.getElementById("number-selectors");
+        for (const selNum in selectors.children) {
+          const sel = selectors.children[selNum];
+          sel.disabled = true;
+        }
+      }
+
+      function disableTakeButton() {
+        const takeButton = document.getElementById("take");
+        takeButton.disabled = true;
+      }
+
+      function setPilesActive(active) {
+        const piles = document.getElementById("piles");
+        console.log(piles.childNodes, active);
+        piles.childNodes.forEach((e) => {
+          if (e.nodeName === "DIV") {
+            console.log(e.children[1].children.length);
+            if (e.children[1].children.length > 0) {
+              if (e.classList.contains("disabled") && active) {
+                console.log("bad");
+                e.classList.remove("disabled");
+              }
+              if (!active) {
+                console.log(piles.childNodes, e.classList);
+                e.classList.add("disabled");
+                console.log(e.classList);
+              }
+            }
+          }
+        });
+      }
+
+      function checkGameOver(potentialWinner) {
+        let isOver = true;
+        const piles = document.getElementById("piles");
+        piles.childNodes.forEach((e) => {
+          if (e.nodeName === "DIV") {
+            console.log();
+            if (e.children[1].children.length > 0) {
+              isOver = false;
+              return;
+            }
+          }
+        });
+        if (!isOver) return false;
+
+        winner = potentialWinner;
+        endGame();
+        return true;
+      }
+
+      function resetGame() {
+        stopTimeouts();
+        setPilesActive(false);
+
+        removeActiveNumber();
+        removeActivePile();
+        disableSelectors();
+        disableTakeButton();
+        firstRound = true;
+
+        document.getElementById("dialogue").innerHTML = "";
+
+        for (let pileNum = 1; pileNum < 4; pileNum++) {
+          const pileWrapper = document.getElementById(`pile-${pileNum}`);
+          const pile = pileWrapper.children[1];
+          pile.innerHTML = `<div class="stone">O</div>
+    <div class="stone">O</div>
+    <div class="stone">O</div>`;
+        }
+
+        startGame();
+      }
+
+      async function takeStones() {
+        const pileWrapper = document.getElementById(`pile-${activePile}`);
+        const pile = pileWrapper.children[1];
+        for (let i = 0; i < activeNumber; i++) {
+          pile.removeChild(pile.children[0]);
+        }
+
+        if (pile.children.length === 0) {
+          pileWrapper.classList.add("disabled");
+          if (checkGameOver(2)) return;
+        }
+
+        let remainingMessage;
+        switch (pile.children.length) {
+          case 0:
+            remainingMessage = "There are no stones left in that pile.";
+            break;
+          case 1:
+            remainingMessage = "There is 1 stone left in that pile.";
+            break;
+          case 2:
+            remainingMessage = "There are 2 stones left in that pile.";
+            break;
+        }
+
+        sendMessage(
+          "Game",
+          `You took ${activeNumber} stone${
+            activeNumber > 1 ? "s" : ""
+          } from Pile ${activePile}! ${remainingMessage}`
+        );
+
+        setPilesActive(false);
+
+        removeActiveNumber();
+        removeActivePile();
+        disableSelectors();
+        disableTakeButton();
+
+        await wait();
+        //send random message from unK why bad move
+        sendMessage("unK", getRandomMessage(1));
+        await wait();
+        await goblinTurn();
+      }
+
+      function setActivePile(id) {
+        if (
+          document.getElementById(`pile-${id}`).classList.contains("disabled")
+        )
+          return;
+        removeActivePile();
+        disableSelectors();
+
+        const pileWrapper = document.getElementById(`pile-${id}`);
+        pileWrapper.classList.add("active-pile");
+        activePile = id;
+
+        const selectors = document.getElementById("number-selectors");
+        for (const selNum in selectors.children) {
+          const sel = selectors.children[selNum];
+          if (
+            pileWrapper.children[1].childElementCount >= parseInt(sel.innerHTML)
+          ) {
+            sel.disabled = false;
+          }
+        }
+      }
+
+      function setActiveNumber(num) {
+        removeActiveNumber();
+
+        const selector = document.getElementById(`number-${num}`);
+        selector.classList.add("active-number-selector");
+        activeNumber = num;
+
+        const takeButton = document.getElementById("take");
+        takeButton.disabled = false;
+      }
+
+      function sendMessage(sender, msg) {
+        const dialogueBox = document.getElementById("dialogue");
+        dialogueBox.innerHTML =
+          `<p><b>${sender}:</b> ${msg}</p>` + dialogueBox.innerHTML;
+      }
+
+      async function goblinTurn() {
+        const piles = document.getElementById("piles");
+        const order = [];
+        piles.childNodes.forEach((e) => {
+          if (e.nodeName === "DIV") {
+            order.push([e.children[1].children.length, order.length + 1]);
+          }
+        });
+        order.sort((valA, valB) => valA[0] - valB[0]); // smallest first, [amt stones, pile num]
+
+        const choosesSmallest = Math.random() * 10 < 1;
+        let choice = order[2][1];
+
+        for (pair of order) {
+          if ((choosesSmallest && pair[0] > 0) || pair[0] === 1) {
+            choice = pair[1];
+            break;
+          }
+        }
+
+        const pileWrapper = document.getElementById(`pile-${choice}`);
+        const pile = pileWrapper.children[1];
+        pile.removeChild(pile.children[0]);
+
+        if (pile.children.length === 0) {
+          pileWrapper.classList.add("disabled");
+          if (checkGameOver(1)) return;
+        }
+
+        let remainingMessage;
+        switch (pile.children.length) {
+          case 0:
+            remainingMessage = "There are no stones left in that pile.";
+            break;
+          case 1:
+            remainingMessage = "There is 1 stone left in that pile.";
+            break;
+          case 2:
+            remainingMessage = "There are 2 stones left in that pile.";
+            break;
+        }
+
+        sendMessage(
+          "Game",
+          `The goblins took 1 stone from Pile ${choice}! ${remainingMessage}`
+        );
+        await wait(1);
+
+        //create random messages
+        sendMessage("unK", getRandomMessage(0));
+        await wait();
+        if (firstRound) {
+          sendMessage(
+            "unK",
+            "Now its your turn, select your pile and how many you want to take."
+          );
+          firstRound = false;
+        }
+        setPilesActive(true);
+      }
+
+      function wait(seconds = 3) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("resolved");
+          }, seconds * 1000);
+        });
+      }
+
+      async function startGame() {
+        await wait(1);
+        sendMessage(
+          "unK",
+          "Welcome to our stoNe gaMe! Be sure you know how to play, me and glooB are the best in the business!"
+        );
+        await wait();
+        sendMessage("unK", "We will go first.");
+        await wait(1);
+
+        await goblinTurn();
+      }
+
+      async function endGame() {
+        disableSelectors();
+        disableTakeButton();
+        removeActiveNumber();
+        removeActivePile();
+        setPilesActive(false);
+
+        sendMessage(
+          "Game",
+          winner === 1
+            ? "Congratulations! You are the winner of this round of stoNe gaMe!"
+            : "unK and glooB are the winners of this round!"
+        );
+        await wait();
+        // random messges
+        sendMessage(
+          "unK",
+          winner === 1 ? getRandomMessage(2) : getRandomMessage(3)
+        );
+      }
+
+      function getRandomMessage(scenario) {
+        const options = messages[scenario];
+        return options[Math.floor(Math.random() * options.length)];
+      }
+
+      function stopTimeouts() {
+        const highestId = window.setTimeout(() => {
+          for (let i = highestId; i >= 0; i--) {
+            window.clearInterval(i);
+          }
+        }, 0);
+      }
+
+      // their move, user move, their loss, their win
+      const messages = [
+        [
+          "glooB made this move because of the obvious tactical advantage of this stone",
+          "Oh, that last move, pure goblin genius! We set the stage for your downfall!",
+          "I see your strategy unravel with every stone we take. We're unstoppable!",
+          "The goblins' brilliance shines through each stone we chose. It's our game!",
+          "You fell right into our trap! That move was a masterstroke of strategy!",
+          "Behold the finesse of the goblins! Our moves are flawless, unmatched!",
+          "With every stone we pick, your hopes crumbled. We're the stoNe gaMe kings!",
+          "Did you see that? Our move was like a goblin ballet, graceful and unbeatable!",
+          "We led you into a labyrinth of stones, and you couldn't escape! Pure genius!",
+          "The goblin cunning prevails once again! Our move are clearly leaving you baffled!",
+          "You didn't see this coming. Our move was as mysterious as the goblin moon.",
+        ],
+        [
+          "Ha, you have made a critical error!",
+          "Oh dear, that move was a blunder! You walked right into our web.",
+          "That move was like a gift to us! You practically handed over the victory.",
+          "That move was a catastrophe. The goblins are clearly superior.",
+          "Did you even think before making that move? It was laughably bad!",
+          "That move was so predictable, it's almost sad. Goblins always outsmart humans.",
+          "We saw that coming a mile away! Your move was a feeble attempt to stop us.",
+          "You played right into our hands! Our victory is inevitable.",
+          "In the world of goblins, that move was equivalent to surrender.",
+          "A rookie mistake! You clearly don't understand the stoNe gaMe.",
+          "That move was a blight on the history of the stoNe gaMe. Goblins rule!",
+        ],
+        [
+          "Psh... that was a warmup round, we are obviously still the reigning champs",
+          "Well, that was unexpected, but it's just a minor setback!",
+          "Losing? Nah, we just wanted to give you a chance to feel good.",
+          "Goblins sometimes take the scenic route to victory. We'll get there!",
+          "A tiny hiccup on our path to dominance. We'll bounce back!",
+          "Losing once is just a lesson in humility. The goblins remain strong!",
+          "Our defeat was a mere illusion. Next time, you won't be so lucky!",
+          "A temporary lapse in our goblin greatness. Watch us rise again!",
+          "You can celebrate now, but you won't enjoy it for long!",
+          "A momentary slip, but the goblins are still the masters of the stoNe gaMe!",
+          "We will let you savor this rare victory. It won't happen again!",
+        ],
+        [
+          "Ha! Winners again, but better luck next time... not!!",
+          "Oh, what a surprise! We won. Who saw that coming?",
+          "Congratulations on being the second-best stoNe gaMe players in the room!",
+          "We won, obviously. It's a goblin thing, you wouldn't understand.",
+          "Better luck next time, if there's even a next time for you.",
+          "You really thought you could beat us? That's cute.",
+          "We're just too good for you. Maybe practice more...or not.",
+          "A valiant effort, but in the end, goblins always prevail.",
+          "We won because we're goblins, and you're...well, not goblins.",
+          "Don't feel too bad about losing. It happens to the best of non-goblins.",
+          "We're just on a different level. Maybe stick to easier games next time.",
+        ],
+      ];
+    </script>
+  </head>
+  <body onload="startGame()">
+    <h1>stoNe gaMe</h1>
+    <p>
+      The goblinS have invented a game that, in their language, is impossible
+      for us to pronounce, but, in English, is called the stoNe gaMe. The two
+      best gobliN players of all of the goblinS who play the stoNe gaMe are unK
+      and glooB. The game is played by setting up 3 piles of stones. Each pile
+      has 3 stones in it. On your turn, you can take any number of stones from
+      any pile you like. If you take the last stone from the last pile, you lose
+      the game. <br /><br />
+      To play, click on the pile of your choice. Then, click the button with the
+      number of stones you wish to take, then press the take button. The stones
+      will disappear, and the game will send messages in the dialogue box at the
+      bottom of the screen.
+    </p>
+    <div class="piles" id="piles">
+      <div class="pile-wrapper disabled" id="pile-1" onclick="setActivePile(1)">
+        <h3>Pile 1</h3>
+        <div class="pile">
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+        </div>
+      </div>
+      <div class="pile-wrapper disabled" id="pile-2" onclick="setActivePile(2)">
+        <h3>Pile 2</h3>
+        <div class="pile">
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+        </div>
+      </div>
+      <div class="pile-wrapper disabled" id="pile-3" onclick="setActivePile(3)">
+        <h3>Pile 3</h3>
+        <div class="pile">
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+          <div class="stone">O</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="number-selectors" id="number-selectors">
+      <button
+        class="number-selector number-1"
+        id="number-1"
+        onclick="setActiveNumber(1);"
+        disabled
+      >
+        1
+      </button>
+      <button
+        class="number-selector number-2"
+        id="number-2"
+        onclick="setActiveNumber(2);"
+        disabled
+      >
+        2
+      </button>
+      <button
+        class="number-selector number-3"
+        id="number-3"
+        onclick="setActiveNumber(3);"
+        disabled
+      >
+        3
+      </button>
+    </div>
+    <div>
+      <button class="take" id="take" disabled onclick="takeStones();">
+        Take
+      </button>
+      <button class="reset" id="reset" onclick="resetGame();">Reset</button>
+    </div>
+    <div class="dialogue" id="dialogue"></div>
+    <a href="./tutorial.html">How to play</a>
+  </body>
+</html>
