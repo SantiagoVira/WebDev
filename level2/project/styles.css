@@ -1,14 +1,7 @@
 .main-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-
-.image-card {
-  border-radius: 0.5rem;
-  overflow: hidden;
-  background-color: red;
-  z-index: 0;
+  gap: 1.5rem;
 }
 
 .image-card-main {
@@ -39,6 +32,7 @@
 
 .image-card-front,
 .image-card-back {
+  border-radius: 0.5rem;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -47,12 +41,18 @@
 }
 
 .image-card-front {
-  background-color: #bbb;
-  color: black;
+  background-color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 400%;
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .image-card-back {
   background-color: #2980b9;
+  overflow: hidden;
   color: white;
   transform: rotateY(180deg);
 }
