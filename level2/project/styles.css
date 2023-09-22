@@ -9,6 +9,7 @@
   width: 8vw;
   aspect-ratio: 1;
   perspective: 1000px;
+  transition: transform 0.3s;
 }
 
 .image-card-inner {
@@ -26,7 +27,11 @@
   height: auto;
 }
 
-.image-card-main:hover .image-card-inner {
+.image-card-main:hover {
+  transform: scale(1.1);
+}
+
+.image-card-main.active .image-card-inner {
   transform: rotateY(180deg);
 }
 
@@ -38,6 +43,7 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  user-select: none;
 }
 
 .image-card-front {
