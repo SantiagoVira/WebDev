@@ -1,4 +1,5 @@
 let flippedCard = null;
+let isWaiting = false;
 
 const createCard = (catNum, idx) => {
   const card = document.createElement("div");
@@ -30,23 +31,31 @@ const onStart = () => {
 };
 
 const flip = (id) => {
+  if (isWaiting) return;
+
   if (flippedCard) {
     const newCard = document.getElementById(id);
 
     const oldNum = flippedCard.key;
     const newNum = newCard.key;
 
+    newCard.classList.add("active");
     if (oldNum === newNum) {
       // Found match
-
-      flippedCard = null;
-      newCard.classList.add("active");
-      return;
     } else {
-      flippedCard.classList.remove("active");
+      isWaiting = true;
+      const flippedId = flippedCard.id;
+      const newId = id;
+      setTimeout(() => {
+        document.getElementById(flippedId).classList.remove("active");
+        document.getElementById(newId).classList.remove("active");
+        isWaiting = false;
+      }, 2500);
     }
-  }
 
-  flippedCard = document.getElementById(id);
-  flippedCard.classList.add("active");
+    flippedCard = null;
+  } else {
+    flippedCard = document.getElementById(id);
+    flippedCard.classList.add("active");
+  }
 };
