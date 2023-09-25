@@ -27,8 +27,11 @@
   height: auto;
 }
 
-.image-card-main:hover {
+.main-grid:not(:has(.two-active)) .image-card-main:hover {
   transform: scale(1.1);
+}
+.active {
+  transform: scale(1.03);
 }
 
 .image-card-main.active .image-card-inner {

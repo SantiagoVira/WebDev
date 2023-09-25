@@ -21,7 +21,6 @@ const createCard = (catNum, idx) => {
 
   const mainGrid = document.getElementById("main-grid");
   mainGrid.appendChild(card);
-  console.log(card);
 };
 
 const onStart = () => {
@@ -40,15 +39,19 @@ const flip = (id) => {
     const newNum = newCard.key;
 
     newCard.classList.add("active");
+
     if (oldNum === newNum) {
       // Found match
     } else {
       isWaiting = true;
       const flippedId = flippedCard.id;
       const newId = id;
+
+      newCard.classList.add("two-active");
+
       setTimeout(() => {
         document.getElementById(flippedId).classList.remove("active");
-        document.getElementById(newId).classList.remove("active");
+        document.getElementById(newId).classList.remove("active", "two-active");
         isWaiting = false;
       }, 2500);
     }
