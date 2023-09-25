@@ -1,5 +1,6 @@
 let flippedCard = null;
 let isWaiting = false;
+let score = 0;
 
 const createCard = (catNum, idx) => {
   const card = document.createElement("div");
@@ -23,10 +24,42 @@ const createCard = (catNum, idx) => {
   mainGrid.appendChild(card);
 };
 
-const onStart = () => {
-  for (let i = 0; i < 16; i++) {
-    createCard((i % 8) + 1, i);
+const shuffle = (array) => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex > 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
   }
+
+  return array;
+};
+
+const onStart = () => {
+  let indices = Array(16)
+    .fill(0)
+    .map((_, i) => i);
+  shuffle(indices);
+
+  for (let i = 0; i < 16; i++) {
+    const idx = indices[i];
+    createCard((idx % 8) + 1, idx);
+  }
+};
+
+const reset = () => {
+  const main = document.getElementById("main-grid");
+  main.innerHTML = "";
+  onStart();
 };
 
 const flip = (id) => {
