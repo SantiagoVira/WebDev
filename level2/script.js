@@ -44,6 +44,11 @@ const shuffle = (array) => {
   return array;
 };
 
+const displayScore = () => {
+  const text = document.getElementById("score");
+  text.innerHTML = `Score: ${score}`;
+};
+
 const onStart = () => {
   let indices = Array(16)
     .fill(0)
@@ -60,10 +65,16 @@ const reset = () => {
   const main = document.getElementById("main-grid");
   main.innerHTML = "";
   onStart();
+  score = 0;
+  displayScore();
 };
 
 const flip = (id) => {
   if (isWaiting) return;
+
+  if (document.getElementById(id).classList.contains("active")) return;
+  score++;
+  displayScore();
 
   if (flippedCard) {
     const newCard = document.getElementById(id);

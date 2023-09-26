@@ -27,7 +27,7 @@
   height: auto;
 }
 
-.main-grid:not(:has(.two-active)) .image-card-main:hover {
+.main-grid:not(:has(.two-active)) .image-card-main:not(.active):hover {
   transform: scale(1.1);
 }
 .active {
