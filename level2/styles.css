@@ -65,3 +65,11 @@
   color: white;
   transform: rotateY(180deg);
 }
+
+button {
+  background-color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: var(--bg);
+  border: 2px solid var(--text);
+}
