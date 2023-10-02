@@ -8,8 +8,18 @@
   </head>
   <body onload="onStart();">
     <script src="./script.js"></script>
+    <p class="how-to-play">
+      To find a match, click on any two cards that have yet to be revealed. As
+      you find matches, those images will be revealed, but watch out! The
+      computer is keeping track of the number of times you click and judging
+      your every move.
+    </p>
     <div class="main-grid" id="main-grid"></div>
     <h3 id="score">Score: 0</h3>
     <button onclick="reset()">Reset</button>
+    <div class="modal modal-hidden" id="modal">
+      <p id="modal-text" class="modal-text"></p>
+      <button onclick="reset()">Play again</button>
+    </div>
   </body>
 </html>

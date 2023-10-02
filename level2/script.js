@@ -1,6 +1,7 @@
 let flippedCard = null;
 let isWaiting = false;
 let score = 0;
+let matches = 0;
 
 const createCard = (catNum, idx) => {
   const card = document.createElement("div");
@@ -64,8 +65,10 @@ const onStart = () => {
 const reset = () => {
   const main = document.getElementById("main-grid");
   main.innerHTML = "";
+  document.getElementById("modal").classList.add("modal-hidden");
   onStart();
   score = 0;
+  matches = 0;
   displayScore();
 };
 
@@ -86,6 +89,10 @@ const flip = (id) => {
 
     if (oldNum === newNum) {
       // Found match
+      matches++;
+      if (matches === 8) {
+        onWin();
+      }
     } else {
       isWaiting = true;
       const flippedId = flippedCard.id;
@@ -105,4 +112,25 @@ const flip = (id) => {
     flippedCard = document.getElementById(id);
     flippedCard.classList.add("active");
   }
+};
+
+const onWin = () => {
+  const messages = [
+    [
+      "Congratulations, you did amazing!",
+      "You're not a failure!",
+      "You're a W",
+    ],
+    ["You're mid", "That was a good try!", "Not so bad"],
+    ["You might be a failure", "That was pretty bad...", "You can do better!"],
+  ];
+  document.getElementById("modal").classList.remove("modal-hidden");
+  document.getElementById("modal-text").innerHTML = `
+    Score: ${score}<br>
+    ${
+      messages[score > 60 ? 2 : Math.floor((score - 1) / 20)][
+        Math.floor(Math.random() * 3)
+      ]
+    }
+  `;
 };

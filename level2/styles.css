@@ -6,7 +6,7 @@
 
 .image-card-main {
   background-color: transparent;
-  width: max(8vw, 4rem);
+  width: max(6.75vw, 4rem);
   aspect-ratio: 1;
   perspective: 1000px;
   transition: transform 0.3s;
@@ -55,7 +55,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: max(4vw, 2rem);
+  font-size: max(3vw, 2rem);
   color: rgba(0, 0, 0, 0.3);
 }
 
@@ -72,4 +72,44 @@ button {
   padding: 0.5rem 1rem;
   color: var(--bg);
   border: 2px solid var(--text);
+}
+
+.how-to-play {
+  width: min(600px, 80%);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.modal {
+  /* Appearance */
+  width: max(80vw, 20rem);
+  aspect-ratio: 2;
+  background-color: var(--bg);
+  border-radius: 1.5rem;
+
+  /* Positioning */
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+
+  /* Other */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-hidden {
+  display: none;
+}
+
+.modal-text {
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
 }
