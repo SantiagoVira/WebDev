@@ -14,7 +14,6 @@ const weapons = {
 const updateNumbers = () => {
   ["computer", "my"].forEach((player) => {
     ["rocks", "paper", "scissors"].forEach((weapon) => {
-      console.log(player, weapon, weapons[player]);
       document.getElementById(`${player}-${weapon}`).innerHTML =
         weapons[player][weapon];
     });
@@ -22,6 +21,5 @@ const updateNumbers = () => {
 };
 
 const startGame = () => {
-  console.log("hello");
   updateNumbers();
 };
