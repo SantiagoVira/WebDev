@@ -12,6 +12,7 @@ h2 {
   line-height: 110%;
   font-size: 2rem;
   width: fit-content;
+  margin-left: 1rem;
 }
 
 .projects {
@@ -20,6 +21,7 @@ h2 {
   overflow-x: scroll;
   padding: 2rem;
   gap: 2rem;
+  padding-left: 1rem;
 }
 
 .project-card {
