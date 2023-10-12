@@ -104,7 +104,7 @@ const flip = (id) => {
         document.getElementById(flippedId).classList.remove("active");
         document.getElementById(newId).classList.remove("active", "two-active");
         isWaiting = false;
-      }, 2500);
+      }, 1000);
     }
 
     flippedCard = null;
