@@ -41,15 +41,27 @@
     <div class="you">
       <h2>You</h2>
       <div class="my-weapons">
-        <button class="my-weapon-button">
-          <img src="./images/rock.svg" alt="rock" height="35px" />
+        <button
+          class="my-weapon-button"
+          id="my-rocks-button"
+          onclick="playerChooseWeapon('rocks')"
+        >
+          <img src="./images/rocks.svg" alt="rock" height="35px" />
           <p id="my-rocks">5</p>
         </button>
-        <button class="my-weapon-button">
+        <button
+          class="my-weapon-button"
+          id="my-paper-button"
+          onclick="playerChooseWeapon('paper')"
+        >
           <img src="./images/paper.svg" alt="paper" height="35px" />
           <p id="my-paper">5</p>
         </button>
-        <button class="my-weapon-button">
+        <button
+          class="my-weapon-button"
+          id="my-scissors-button"
+          onclick="playerChooseWeapon('scissors')"
+        >
           <img src="./images/scissors.svg" alt="scissors" height="35px" />
           <p id="my-scissors">5</p>
         </button>

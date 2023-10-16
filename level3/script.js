@@ -1,15 +1,16 @@
 const weapons = {
   computer: {
-    rocks: 2,
-    paper: 4,
-    scissors: 3,
+    rocks: 5,
+    paper: 5,
+    scissors: 5,
   },
   my: {
-    rocks: 1,
-    paper: 2,
-    scissors: 3,
+    rocks: 5,
+    paper: 5,
+    scissors: 5,
   },
 };
+let selectedWeapon = "";
 
 const updateNumbers = () => {
   ["computer", "my"].forEach((player) => {
@@ -22,4 +23,18 @@ const updateNumbers = () => {
 
 const startGame = () => {
   updateNumbers();
+};
+
+const playerChooseWeapon = (weapon) => {
+  document.getElementById(`my-${weapon}-button`).classList.add("selected");
+  if (selectedWeapon !== "") {
+    document
+      .getElementById(`my-${selectedWeapon}-button`)
+      .classList.remove("selected");
+  }
+  selectedWeapon = weapon;
+
+  document.getElementById(
+    "my-slot"
+  ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="35px" />`;
 };
