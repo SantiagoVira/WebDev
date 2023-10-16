@@ -32,10 +32,10 @@ a {
 }
 
 button {
-  transition: 0.3s all;
+  transition: 0.15s all;
 }
 
 button:hover {
-  scale: 1.07;
-  filter: brightness(0.85);
+  scale: 1.04;
+  /* filter: brightness(0.85); */
 }
