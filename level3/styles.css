@@ -47,6 +47,19 @@
   margin: 0;
 }
 
+#fight {
+  border: 0;
+  display: flex;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  background-color: var(--text);
+  color: var(--bg);
+}
+
 /* Hover and Disabled Effects */
 
 .my-weapon-button:not(.selected):not(:active):hover {
@@ -57,26 +70,19 @@
   background-color: color-mix(in srgb, var(--text) 20%, transparent);
 }
 
-.active-pile,
-.active-number-selector,
-.reset:active {
-  background-color: color-mix(in srgb, var(--text) 10%, transparent);
-}
-.take:hover:active {
-  background-color: color-mix(in srgb, var(--text) 80%, transparent);
-}
-
 .number-selector:disabled,
 .pile-wrapper.disabled,
 .reset:disabled,
-.take:disabled {
+.take:disabled,
+#fight:disabled {
   opacity: 0.3;
 }
 
 .arena {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   gap: 1.3rem;
 }
 
@@ -86,13 +92,7 @@
   height: 8rem;
   border: 1px solid var(--text);
   border-radius: 0.5rem;
-}
-
-#computer-side,
-#my-side {
   display: flex;
   align-items: center;
-  flex-direction: column;
   justify-content: center;
-  gap: 1rem;
 }

@@ -35,7 +35,7 @@ button {
   transition: 0.15s all;
 }
 
-button:hover {
+button:not(:disabled):hover {
   scale: 1.04;
   /* filter: brightness(0.85); */
 }
