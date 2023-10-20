@@ -10,11 +10,12 @@ const weapons = {
     scissors: 5,
   },
 };
+const choices = ["rocks", "paper", "scissors"];
 let selectedWeapon = "";
 
 const updateNumbers = () => {
   ["computer", "my"].forEach((player) => {
-    ["rocks", "paper", "scissors"].forEach((weapon) => {
+    choices.forEach((weapon) => {
       document.getElementById(`${player}-${weapon}`).innerHTML =
         weapons[player][weapon];
     });
@@ -37,13 +38,13 @@ const playerChooseWeapon = (weapon) => {
 
   document.getElementById(
     "my-slot"
-  ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="35px" />`;
+  ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="40px" />`;
 };
 
 const fight = () => {
   document.getElementById("computer-slot").innerHTML = `
   <div class="cube-wrap">
-    <div class="cube">
+    <div class="cube spin-to-${choices[2]}">
       <div class="side top">
         <img src="./images/rocks.svg" alt="rock" height="40px" />
       </div>

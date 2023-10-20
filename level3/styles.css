@@ -111,22 +111,50 @@
   left: 50%;
   width: 0;
   height: 0;
-  perspective: 100vmin;
+  perspective: 1;
   z-index: 10;
 }
 .cube {
   transform-style: preserve-3d;
-  animation: cube 3s;
+  animation-duration: 3s;
 }
 
-@keyframes cube {
+@keyframes spin-to-paper {
   0% {
-    transform: rotate(0);
+    transform: rotateX(0);
     animation-timing-function: cubic-bezier(0.49, 1.19, 0.91, 0.94);
   }
   100% {
     transform: rotateX(7200deg);
   }
+}
+@keyframes spin-to-rock {
+  0% {
+    transform: rotateX(0deg);
+    animation-timing-function: cubic-bezier(0.49, 1.19, 0.91, 0.94);
+  }
+  100% {
+    transform: rotateX(7080deg);
+  }
+}
+@keyframes spin-to-scissors {
+  0% {
+    transform: rotateX(0deg);
+    animation-timing-function: cubic-bezier(0.49, 1.19, 0.91, 0.94);
+  }
+  100% {
+    transform: rotateX(7320deg);
+  }
+}
+
+.spin-to-paper {
+  animation-name: spin-to-paper;
+}
+.spin-to-rocks {
+  animation-name: spin-to-rock;
+}
+.spin-to-scissors {
+  animation-name: spin-to-scissors;
 }
 
 .side {
@@ -142,15 +170,17 @@
   align-items: center;
   justify-content: center;
 }
+
 .top {
-  transform: translateY(calc(var(--size) * -0.25)) rotateX(-60deg)
-    rotateZ(180deg);
+  transform: translateY(calc(var(--size) * -0.25))
+    translateZ(calc(var(--size) * -0.14437756)) rotateX(-60deg) rotateZ(180deg);
 }
 .front {
-  transform: translateZ(calc(var(--size) * 0.433));
+  transform: translateZ(calc(var(--size) * 0.288675));
 }
 .bottom {
-  transform: translateY(calc(var(--size) * 0.25)) rotateX(60deg) rotateZ(180deg);
+  transform: translateY(calc(var(--size) * 0.25))
+    translateZ(calc(var(--size) * -0.14437756)) rotateX(60deg) rotateZ(180deg);
 }
 
 :root * {
