@@ -39,3 +39,15 @@ const playerChooseWeapon = (weapon) => {
     "my-slot"
   ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="35px" />`;
 };
+
+/* Computer spinning */
+window.addEventListener(
+  "scroll",
+  () => {
+    document.body.style.setProperty(
+      "--scroll",
+      window.pageYOffset / (document.body.offsetHeight - window.innerHeight)
+    );
+  },
+  false
+);

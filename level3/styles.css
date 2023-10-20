@@ -96,3 +96,57 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Computer spinning animation */
+body {
+  min-height: 500vh;
+}
+
+.cube-wrap {
+  --size: 4rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  perspective: 100vmin;
+}
+.cube {
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateZ(0deg) rotateY(0deg);
+  animation: cube 1s linear;
+}
+@keyframes cube {
+  to {
+    transform: rotateX(360deg) rotateZ(0deg) rotateY(0deg);
+  }
+}
+
+.side {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--bg);
+  border: 1px solid var(--text);
+  top: calc(var(--size) * -0.5);
+  left: calc(var(--size) * -0.5);
+}
+.top {
+  transform: translateY(calc(var(--size) * -0.25)) rotateX(-60deg);
+}
+.front {
+  transform: translateZ(calc(var(--size) * 0.433));
+}
+.bottom {
+  transform: translateY(calc(var(--size) * 0.25)) rotateX(60deg);
+}
+
+:root * {
+  /* Pause the animation */
+  animation-play-state: paused;
+  /* Bind the animation to scroll */
+  animation-delay: calc(var(--scroll) * -1s);
+  /* These last 2 properites clean up overshoot weirdness */
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
