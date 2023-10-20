@@ -40,14 +40,34 @@ const playerChooseWeapon = (weapon) => {
   ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="35px" />`;
 };
 
+const fight = () => {
+  document.getElementById("computer-slot").innerHTML = `
+  <div class="cube-wrap">
+    <div class="cube">
+      <div class="side top">
+        <img src="./images/rocks.svg" alt="rock" height="40px" />
+      </div>
+      <div class="side front">
+        <img src="./images/paper.svg" alt="paper" height="40px" />
+      </div>
+      <div class="side bottom">
+        <img src="./images/scissors.svg" alt="scissors" height="40px" />
+      </div>
+    </div>
+  </div>`;
+  document.getElementById("fight").disabled = true;
+};
+
 /* Computer spinning */
 window.addEventListener(
   "scroll",
   () => {
     document.body.style.setProperty(
       "--scroll",
-      window.pageYOffset / (document.body.offsetHeight - window.innerHeight)
+      (window.pageYOffset * 100) /
+        (document.body.offsetHeight - window.innerHeight)
     );
+    console.log(document.body.style.getPropertyValue("--scroll"));
   },
   false
 );
