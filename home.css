@@ -17,6 +17,7 @@ h2 {
 
 .projects {
   display: flex;
+  flex-direction: row-reverse;
   max-width: 90vw;
   overflow-x: scroll;
   padding: 2rem;

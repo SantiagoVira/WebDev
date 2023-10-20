@@ -32,6 +32,7 @@ const playerChooseWeapon = (weapon) => {
       .getElementById(`my-${selectedWeapon}-button`)
       .classList.remove("selected");
   }
+  document.getElementById("fight").disabled = false;
   selectedWeapon = weapon;
 
   document.getElementById(
