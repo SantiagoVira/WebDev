@@ -22,6 +22,9 @@ const updateNumbers = () => {
   });
 };
 
+const userWins = (computerIdx) =>
+  (computerIdx + 1) % 3 === choices.indexOf(selectedWeapon);
+
 const startGame = () => {
   updateNumbers();
 };
@@ -47,6 +50,23 @@ const fight = () => {
   document
     .querySelectorAll(".my-weapon-button")
     .forEach((weapon) => (weapon.disabled = true));
+  document.getElementById("game-result").innerHTML = "3";
+  setTimeout(() => {
+    document.getElementById("game-result").innerHTML = "2";
+    setTimeout(() => {
+      document.getElementById("game-result").innerHTML = "1";
+      setTimeout(() => {
+        document.getElementById("game-result").innerHTML = "Computer wins :(";
+        /*userWins(
+          computerChoice
+        )
+          ? "You Win!!"
+          : choices[computerChoice] === selectedWeapon
+          ? "Tie!!"
+          : "Computer wins :(";*/
+      }, 1000);
+    }, 1000);
+  }, 1000);
 
   document.getElementById("computer-slot").innerHTML = `
   <div class="cube-wrap">

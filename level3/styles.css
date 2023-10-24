@@ -60,12 +60,19 @@
   color: var(--bg);
 }
 
+#game-result {
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+  text-wrap: wrap;
+}
+
 /* Hover and Disabled Effects */
 
 .my-weapon-button:not(.selected):enabled:not(:active):hover {
   background-color: color-mix(in srgb, var(--text) 10%, transparent);
 }
-.my-weapon-button:active,
+.my-weapon-button:enabled:active,
 .my-weapon-button.selected {
   background-color: color-mix(in srgb, var(--text) 20%, transparent);
 }
@@ -117,7 +124,7 @@
 }
 .cube {
   transform-style: preserve-3d;
-  animation-duration: 2.4s;
+  animation-duration: 3s;
 }
 
 @keyframes spin-to-paper {
