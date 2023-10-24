@@ -62,7 +62,7 @@
 
 /* Hover and Disabled Effects */
 
-.my-weapon-button:not(.selected):not(:active):hover {
+.my-weapon-button:not(.selected):enabled:not(:active):hover {
   background-color: color-mix(in srgb, var(--text) 10%, transparent);
 }
 .my-weapon-button:active,
@@ -74,7 +74,8 @@
 .pile-wrapper.disabled,
 .reset:disabled,
 .take:disabled,
-#fight:disabled {
+#fight:disabled,
+.my-weapon-button:disabled {
   opacity: 0.3;
 }
 
@@ -116,7 +117,7 @@
 }
 .cube {
   transform-style: preserve-3d;
-  animation-duration: 3s;
+  animation-duration: 2.4s;
 }
 
 @keyframes spin-to-paper {

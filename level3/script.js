@@ -42,9 +42,15 @@ const playerChooseWeapon = (weapon) => {
 };
 
 const fight = () => {
+  const computerChoice = Math.floor(Math.random() * 3);
+
+  document
+    .querySelectorAll(".my-weapon-button")
+    .forEach((weapon) => (weapon.disabled = true));
+
   document.getElementById("computer-slot").innerHTML = `
   <div class="cube-wrap">
-    <div class="cube spin-to-${choices[2]}">
+    <div class="cube spin-to-${choices[computerChoice]}">
       <div class="side top">
         <img src="./images/rocks.svg" alt="rock" height="40px" />
       </div>

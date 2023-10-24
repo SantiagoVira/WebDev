@@ -1,0 +1,283 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="./styles.css" />
+    <link type="text/css" rel="stylesheet" href="/global.css" />
+    <title>Match Game</title>
+  </head>
+  <body onload="onStart();">
+    <script src="./script.js"></script>
+    <p class="how-to-play">
+      To find a match, click on any two cards that have yet to be revealed. As
+      you find matches, those images will be revealed, but watch out! The
+      computer is keeping track of the number of times you click and judging
+      your every move.
+    </p>
+    <div class="main-grid" id="main-grid"></div>
+    <h3 id="score">Score: 0</h3>
+    <button onclick="reset()">Reset</button>
+    <div class="modal modal-hidden" id="modal">
+      <p id="modal-text" class="modal-text"></p>
+      <button onclick="reset()">Play again</button>
+    </div>
+  </body>
+</html>
+
+---------------------------------------------------------------------------------
+
+let flippedCard = null;
+let isWaiting = false;
+let score = 0;
+let matches = 0;
+
+const createCard = (catNum, idx) => {
+  const card = document.createElement("div");
+  card.classList.add("image-card-main");
+  card.id = `card-${idx}`;
+  card.key = catNum;
+  card.innerHTML = `
+<div class="image-card-inner" onclick="flip('card-${idx}')">
+  <div class="image-card-front">
+    ?
+  </div>
+  <div class="image-card-back">
+    <img
+    src="./images/cat${catNum}.jpeg"
+    alt="Cat"
+  />
+  </div>
+</div>`;
+
+  const mainGrid = document.getElementById("main-grid");
+  mainGrid.appendChild(card);
+};
+
+const shuffle = (array) => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex > 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
+
+const displayScore = () => {
+  const text = document.getElementById("score");
+  text.innerHTML = `Score: ${score}`;
+};
+
+const onStart = () => {
+  let indices = Array(16)
+    .fill(0)
+    .map((_, i) => i);
+  shuffle(indices);
+
+  for (let i = 0; i < 16; i++) {
+    const idx = indices[i];
+    createCard((idx % 8) + 1, idx);
+  }
+};
+
+const reset = () => {
+  const main = document.getElementById("main-grid");
+  main.innerHTML = "";
+  document.getElementById("modal").classList.add("modal-hidden");
+  onStart();
+  score = 0;
+  matches = 0;
+  displayScore();
+};
+
+const flip = (id) => {
+  if (isWaiting) return;
+
+  if (document.getElementById(id).classList.contains("active")) return;
+  score++;
+  displayScore();
+
+  if (flippedCard) {
+    const newCard = document.getElementById(id);
+
+    const oldNum = flippedCard.key;
+    const newNum = newCard.key;
+
+    newCard.classList.add("active");
+
+    if (oldNum === newNum) {
+      // Found match
+      matches++;
+      if (matches === 8) {
+        onWin();
+      }
+    } else {
+      isWaiting = true;
+      const flippedId = flippedCard.id;
+      const newId = id;
+
+      newCard.classList.add("two-active");
+
+      setTimeout(() => {
+        document.getElementById(flippedId).classList.remove("active");
+        document.getElementById(newId).classList.remove("active", "two-active");
+        isWaiting = false;
+      }, 1000);
+    }
+
+    flippedCard = null;
+  } else {
+    flippedCard = document.getElementById(id);
+    flippedCard.classList.add("active");
+  }
+};
+
+const onWin = () => {
+  const messages = [
+    [
+      "Congratulations, you did amazing!",
+      "You're not a failure!",
+      "You're a W",
+    ],
+    ["You're mid", "That was a good try!", "Not so bad"],
+    ["You might be a failure", "That was pretty bad...", "You can do better!"],
+  ];
+  document.getElementById("modal").classList.remove("modal-hidden");
+  document.getElementById("modal-text").innerHTML = `
+    Score: ${score}<br>
+    ${
+      messages[score > 60 ? 2 : Math.floor((score - 1) / 20)][
+        Math.floor(Math.random() * 3)
+      ]
+    }
+  `;
+};
+
+
+---------------------------------------------------------------------------------
+
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: max(1.5vw, 0.75rem);
+}
+
+.image-card-main {
+  background-color: transparent;
+  width: max(6.75vw, 4rem);
+  aspect-ratio: 1;
+  perspective: 1000px;
+  transition: transform 0.3s;
+}
+
+.image-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.image-card-inner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.main-grid:not(:has(.two-active)) .image-card-main:not(.active):hover {
+  transform: scale(1.1);
+}
+.active {
+  transform: scale(1.03);
+}
+
+.image-card-main.active .image-card-inner {
+  transform: rotateY(180deg);
+}
+
+.image-card-front,
+.image-card-back {
+  border-radius: 0.5rem;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  user-select: none;
+}
+
+.image-card-front {
+  background-color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: max(3vw, 2rem);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.image-card-back {
+  background-color: #2980b9;
+  overflow: hidden;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+button {
+  background-color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: var(--bg);
+  border: 2px solid var(--text);
+}
+
+.how-to-play {
+  width: min(600px, 80%);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.modal {
+  /* Appearance */
+  width: max(80vw, 20rem);
+  aspect-ratio: 2;
+  background-color: var(--bg);
+  border-radius: 1.5rem;
+
+  /* Positioning */
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 300px 50px rgba(0, 0, 0, 0.75);
+
+  /* Other */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-hidden {
+  display: none;
+}
+
+.modal-text {
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+}
