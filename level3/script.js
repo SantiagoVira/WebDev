@@ -16,14 +16,19 @@ let selectedWeapon = "";
 let log = [];
 
 const repeatedThreeTimes = (userChoice, computerChoice) => {
-  return {
+  if (log.length < 3) return { user: false, computer: false };
+  const obj = {
     user:
-      userChoice === log.slice(-1).userChoice &&
-      log.slice(-1).userChoice === log.slice(-2).userChoice,
+      userChoice === log.slice(-1)[0].userChoice &&
+      log.slice(-1)[0].userChoice === log.slice(-2)[0].userChoice &&
+      log.slice(-2)[0].userChoice === log.slice(-3)[0].userChoice,
     computer:
-      computerChoice === log.slice(-1).computerChoice &&
-      log.slice(-1).computerChoice === log.slice(-2).computerChoice,
+      computerChoice === log.slice(-1)[0].computerChoice &&
+      log.slice(-1)[0].computerChoice === log.slice(-2)[0].computerChoice &&
+      log.slice(-2)[0].computerChoice === log.slice(-3)[0].computerChoice,
   };
+  console.log(obj, userChoice, log.slice(-1), log.slice(-2));
+  return obj;
 };
 
 const updateLog = (userChoice, computerChoice, winner) => {
@@ -36,7 +41,8 @@ const updateLog = (userChoice, computerChoice, winner) => {
     computerChoice,
     winner,
   });
-  document.getElementById("right-area").innerHTML += `
+  document.getElementById("right-area").innerHTML =
+    `
   <div class="log-entry">
           <div>
             <img src="./images/user.svg" alt="User" height="20px" />
@@ -53,7 +59,7 @@ const updateLog = (userChoice, computerChoice, winner) => {
             />
           </div>
           <p>${winner}</p>
-        </div>`;
+        </div>` + document.getElementById("right-area").innerHTML;
 };
 
 const updateNumbers = () => {
@@ -186,6 +192,7 @@ const fight = () => {
         if (didRepeat.computer) {
           weapons.computer[computerChoice] -= 1;
         }
+        updateNumbers();
 
         updateLog(
           selectedWeapon,
