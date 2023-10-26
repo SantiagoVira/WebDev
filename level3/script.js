@@ -13,7 +13,7 @@ const weapons = {
 const choices = ["rocks", "paper", "scissors"];
 let selectedWeapon = "";
 
-const log = [];
+let log = [];
 
 const repeatedThreeTimes = (userChoice, computerChoice) => {
   return {
@@ -106,8 +106,18 @@ const resetGame = () => {
     paper: 5,
     scissors: 5,
   };
+  log = [];
+  document.getElementById("right-area").innerHTML = "";
   updateNumbers();
   nextRound();
+
+  const highestId = window.setTimeout(() => {
+    for (let i = highestId; i >= 0; i--) {
+      window.clearInterval(i);
+    }
+  }, 0);
+
+  document.getElementById("game-result").innerHTML = "";
 };
 
 const playerChooseWeapon = (weapon) => {
