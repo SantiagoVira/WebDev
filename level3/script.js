@@ -95,6 +95,21 @@ const startGame = () => {
   updateNumbers();
 };
 
+const resetGame = () => {
+  weapons.user = {
+    rocks: 5,
+    paper: 5,
+    scissors: 5,
+  };
+  weapons.computer = {
+    rocks: 5,
+    paper: 5,
+    scissors: 5,
+  };
+  updateNumbers();
+  nextRound();
+};
+
 const playerChooseWeapon = (weapon) => {
   document.getElementById(`user-${weapon}-button`).classList.add("selected");
   if (selectedWeapon !== "") {
@@ -154,7 +169,7 @@ const fight = () => {
         );
 
         const fightButton = document.getElementById("fight");
-        fightButton.innerHTML = "Next Round";
+        fightButton.innerHTML = "Continue";
         fightButton.disabled = false;
         fightButton.onclick = nextRound;
       }, 1000);
