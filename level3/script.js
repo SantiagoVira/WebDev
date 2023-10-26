@@ -4,7 +4,7 @@ const weapons = {
     paper: 5,
     scissors: 5,
   },
-  my: {
+  user: {
     rocks: 5,
     paper: 5,
     scissors: 5,
@@ -14,6 +14,17 @@ const choices = ["rocks", "paper", "scissors"];
 let selectedWeapon = "";
 
 const log = [];
+
+const repeatedThreeTimes = (userChoice, computerChoice) => {
+  return {
+    user:
+      userChoice === log.slice(-1).userChoice &&
+      log.slice(-1).userChoice === log.slice(-2).userChoice,
+    computer:
+      computerChoice === log.slice(-1).computerChoice &&
+      log.slice(-1).computerChoice === log.slice(-2).computerChoice,
+  };
+};
 
 const updateLog = (userChoice, computerChoice, winner) => {
   // Winner stored as:
@@ -46,7 +57,7 @@ const updateLog = (userChoice, computerChoice, winner) => {
 };
 
 const updateNumbers = () => {
-  ["computer", "my"].forEach((player) => {
+  ["computer", "user"].forEach((player) => {
     choices.forEach((weapon) => {
       document.getElementById(`${player}-${weapon}`).innerHTML =
         weapons[player][weapon];
@@ -85,25 +96,39 @@ const startGame = () => {
 };
 
 const playerChooseWeapon = (weapon) => {
-  document.getElementById(`my-${weapon}-button`).classList.add("selected");
+  document.getElementById(`user-${weapon}-button`).classList.add("selected");
   if (selectedWeapon !== "") {
     document
-      .getElementById(`my-${selectedWeapon}-button`)
+      .getElementById(`user-${selectedWeapon}-button`)
       .classList.remove("selected");
   }
   document.getElementById("fight").disabled = false;
   selectedWeapon = weapon;
 
   document.getElementById(
-    "my-slot"
+    "user-slot"
   ).innerHTML = `<img src="./images/${weapon}.svg" alt="${weapon}" height="40px" />`;
+};
+
+const nextRound = () => {
+  document.querySelectorAll(".user-weapon-button").forEach((weapon) => {
+    weapon.disabled = false;
+    weapon.classList.remove("selected");
+  });
+  const fightButton = document.getElementById("fight");
+  fightButton.innerHTML = "Fight!";
+  fightButton.onclick = fight;
+  fightButton.disabled = true;
+
+  document.getElementById("computer-slot").innerHTML = "?";
+  document.getElementById("user-slot").innerHTML = "";
 };
 
 const fight = () => {
   const computerChoice = choices[Math.floor(Math.random() * 3)];
 
   document
-    .querySelectorAll(".my-weapon-button")
+    .querySelectorAll(".user-weapon-button")
     .forEach((weapon) => (weapon.disabled = true));
   document.getElementById("game-result").innerHTML = "3";
   setTimeout(() => {
@@ -114,11 +139,24 @@ const fight = () => {
         document.getElementById("game-result").innerHTML =
           getWinnerText(computerChoice);
 
+        const didRepeat = repeatedThreeTimes(selectedWeapon, computerChoice);
+        if (didRepeat.user) {
+          weapons.user[selectedWeapon] -= 1;
+        }
+        if (didRepeat.computer) {
+          weapons.computer[computerChoice] -= 1;
+        }
+
         updateLog(
           selectedWeapon,
           computerChoice,
           getWinnerText(computerChoice)
         );
+
+        const fightButton = document.getElementById("fight");
+        fightButton.innerHTML = "Next Round";
+        fightButton.disabled = false;
+        fightButton.onclick = nextRound;
       }, 1000);
     }, 1000);
   }, 1000);

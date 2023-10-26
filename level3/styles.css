@@ -18,6 +18,13 @@
   align-items: center;
   justify-content: space-between;
 }
+#left-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  border-right: 1px solid var(--text);
+}
 #right-area {
   display: flex;
   flex-direction: column-reverse;
@@ -29,6 +36,7 @@
 .log-entry {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2rem;
   width: 80%;
   aspect-ratio: 4;
@@ -38,6 +46,7 @@
 }
 .log-entry > div {
   display: flex;
+  width: fit-content;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
@@ -77,14 +86,14 @@
   gap: 0.5rem;
 }
 
-.my-weapons {
+.user-weapons {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
 }
 
-.my-weapon-button {
+.user-weapon-button {
   border: 1px solid var(--text);
   display: flex;
   border-radius: 5px;
@@ -96,11 +105,12 @@
   background-color: transparent;
   color: var(--text);
 }
-.my-weapon-button p {
+.user-weapon-button p {
   margin: 0;
 }
 
-#fight {
+#fight,
+#reset-button {
   border: 0;
   display: flex;
   margin-top: 2rem;
@@ -112,6 +122,10 @@
   font-size: 1rem;
   background-color: var(--text);
   color: var(--bg);
+}
+
+#reset-button {
+  font-size: 0.8rem;
 }
 
 #game-result {
@@ -128,11 +142,11 @@
 
 /* Hover and Disabled Effects */
 
-.my-weapon-button:not(.selected):enabled:not(:active):hover {
+.user-weapon-button:not(.selected):enabled:not(:active):hover {
   background-color: color-mix(in srgb, var(--text) 10%, transparent);
 }
-.my-weapon-button:enabled:active,
-.my-weapon-button.selected {
+.user-weapon-button:enabled:active,
+.user-weapon-button.selected {
   background-color: color-mix(in srgb, var(--text) 20%, transparent);
 }
 
@@ -141,7 +155,7 @@
 .reset:disabled,
 .take:disabled,
 #fight:disabled,
-.my-weapon-button:disabled {
+.user-weapon-button:disabled {
   opacity: 0.3;
 }
 
@@ -154,7 +168,7 @@
 }
 
 #computer-slot,
-#my-slot {
+#user-slot {
   width: 6rem;
   height: 8rem;
   border: 1px solid var(--text);
