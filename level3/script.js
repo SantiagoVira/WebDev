@@ -13,6 +13,26 @@ const weapons = {
 const choices = ["rocks", "paper", "scissors"];
 let selectedWeapon = "";
 
+const log = [];
+
+const updateLog = (userChoice, computerChoice, winner) => {
+  // Winner stored as:
+  // 0: User wins
+  // 1: Computer wins
+  // 2: Tie
+  log.push({
+    userChoice,
+    computerChoice,
+    winner,
+  });
+  document.getElementById("right-area").innerHTML += `
+  <div class="log-entry">
+    👦 <img src="./images/${userChoice}.svg" alt="${userChoice}" height="10px" />
+    🖥️ <img src="./images/${computerChoice}.svg" alt="${computerChoice}" height="10px" />
+    Winner: ${winner}
+  </div>`;
+};
+
 const updateNumbers = () => {
   ["computer", "my"].forEach((player) => {
     choices.forEach((weapon) => {
@@ -22,8 +42,31 @@ const updateNumbers = () => {
   });
 };
 
-const userWins = (computerIdx) =>
-  (computerIdx + 1) % 3 === choices.indexOf(selectedWeapon);
+const getWinner = (computerChoice) =>
+  (choices.indexOf(computerChoice) + 1) % 3 === choices.indexOf(selectedWeapon)
+    ? 0
+    : computerChoice === selectedWeapon
+    ? 2
+    : 1;
+
+const getWinnerText = (computerChoice) => {
+  let resultText = "";
+
+  switch (getWinner(computerChoice)) {
+    case 0:
+      resultText = "You Win!!";
+      break;
+    case 1:
+      resultText = "Computer wins :(";
+      break;
+    case 2:
+      resultText = "Tie!!";
+      break;
+    default:
+      resultText = "";
+  }
+  return resultText;
+};
 
 const startGame = () => {
   updateNumbers();
@@ -45,7 +88,7 @@ const playerChooseWeapon = (weapon) => {
 };
 
 const fight = () => {
-  const computerChoice = Math.floor(Math.random() * 3);
+  const computerChoice = choices[Math.floor(Math.random() * 3)];
 
   document
     .querySelectorAll(".my-weapon-button")
@@ -56,20 +99,21 @@ const fight = () => {
     setTimeout(() => {
       document.getElementById("game-result").innerHTML = "1";
       setTimeout(() => {
-        document.getElementById("game-result").innerHTML = userWins(
-          computerChoice
-        )
-          ? "You Win!!"
-          : choices[computerChoice] === selectedWeapon
-          ? "Tie!!"
-          : "Computer wins :(";
+        document.getElementById("game-result").innerHTML =
+          getWinnerText(computerChoice);
+
+        updateLog(
+          selectedWeapon,
+          computerChoice,
+          getWinnerText(computerChoice)
+        );
       }, 1000);
     }, 1000);
   }, 1000);
 
   document.getElementById("computer-slot").innerHTML = `
   <div class="cube-wrap">
-    <div class="cube spin-to-${choices[computerChoice]}">
+    <div class="cube spin-to-${computerChoice}">
       <div class="side top">
         <img src="./images/rocks.svg" alt="rock" height="40px" />
       </div>

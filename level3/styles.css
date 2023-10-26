@@ -20,6 +20,10 @@
 }
 #right-area {
   background: red;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
 }
 
 .computer,
