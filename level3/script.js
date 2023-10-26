@@ -27,10 +27,22 @@ const updateLog = (userChoice, computerChoice, winner) => {
   });
   document.getElementById("right-area").innerHTML += `
   <div class="log-entry">
-    👦 <img src="./images/${userChoice}.svg" alt="${userChoice}" height="10px" />
-    🖥️ <img src="./images/${computerChoice}.svg" alt="${computerChoice}" height="10px" />
-    Winner: ${winner}
-  </div>`;
+          <div>
+            <img src="./images/user.svg" alt="User" height="20px" />
+            <div class="dash"></div>
+            <img src="./images/${userChoice}.svg" alt="${userChoice}" height="20px" />
+          </div>
+          <div>
+            <img src="./images/computer.svg" alt="computer" height="20px" />
+            <div class="dash"></div>
+            <img
+              src="./images/${computerChoice}.svg"
+              alt="${computerChoice}"
+              height="20px"
+            />
+          </div>
+          <p>${winner}</p>
+        </div>`;
 };
 
 const updateNumbers = () => {

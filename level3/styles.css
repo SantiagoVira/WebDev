@@ -19,11 +19,36 @@
   justify-content: space-between;
 }
 #right-area {
-  background: red;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
+  justify-content: start;
+  border-left: 1px solid var(--text);
+  padding-left: 1rem;
+}
+.log-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 80%;
+  aspect-ratio: 4;
+  padding: 1rem;
+  border: 1px solid var(--text);
+  border-radius: 0.7rem;
+}
+.log-entry > div {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+}
+.log-entry p {
+  text-align: center;
+}
+.log-entry .dash {
+  height: 0;
+  width: 1rem;
+  border-top: 1px solid var(--text);
 }
 
 .computer,
