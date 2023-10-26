@@ -1,3 +1,9 @@
+/*
+TODO
+- on win
+- responsiveness
+*/
+
 const weapons = {
   computer: {
     rocks: 5,
