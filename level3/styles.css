@@ -32,6 +32,7 @@
   justify-content: start;
   border-left: 1px solid var(--text);
   padding-left: 1rem;
+  gap: 1rem;
 }
 .log-entry {
   display: flex;

@@ -139,6 +139,21 @@ const nextRound = () => {
   document.getElementById("user-slot").innerHTML = "";
 };
 
+const changeWeapons = (computerChoice, userChoice) => {
+  const winnerIdx = getWinner(computerChoice);
+  if (winnerIdx === 2) return;
+
+  const winner = winnerIdx === 0 ? "user" : "computer";
+  const loser = winnerIdx === 0 ? "computer" : "user";
+  const lostWeapon = winnerIdx === 0 ? computerChoice : userChoice;
+  if (weapons[loser][lostWeapon] === 0) return;
+
+  weapons[winner][lostWeapon] += 1;
+  weapons[loser][lostWeapon] -= 1;
+
+  updateNumbers();
+};
+
 const fight = () => {
   const computerChoice = choices[Math.floor(Math.random() * 3)];
 
@@ -167,6 +182,8 @@ const fight = () => {
           computerChoice,
           getWinnerText(computerChoice)
         );
+
+        changeWeapons(computerChoice, selectedWeapon);
 
         const fightButton = document.getElementById("fight");
         fightButton.innerHTML = "Continue";
