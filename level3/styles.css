@@ -2,6 +2,11 @@ body {
   overflow-y: hidden;
 }
 
+body > p {
+  max-width: 70vw;
+  text-align: center;
+}
+
 #main-grid {
   display: flex;
   align-items: start;
