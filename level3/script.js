@@ -56,14 +56,13 @@ const fight = () => {
     setTimeout(() => {
       document.getElementById("game-result").innerHTML = "1";
       setTimeout(() => {
-        document.getElementById("game-result").innerHTML = "Computer wins :(";
-        /*userWins(
+        document.getElementById("game-result").innerHTML = userWins(
           computerChoice
         )
           ? "You Win!!"
           : choices[computerChoice] === selectedWeapon
           ? "Tie!!"
-          : "Computer wins :(";*/
+          : "Computer wins :(";
       }, 1000);
     }, 1000);
   }, 1000);
