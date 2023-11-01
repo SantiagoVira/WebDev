@@ -11,7 +11,7 @@ const weapons = {
     scissors: 5,
   },
   user: {
-    rocks: 5,
+    rocks: 0,
     paper: 5,
     scissors: 5,
   },
@@ -133,6 +133,7 @@ const resetGame = () => {
 };
 
 const playerChooseWeapon = (weapon) => {
+  if (document.getElementById(`user-${weapon}`).innerHTML === "0") return;
   document.getElementById(`user-${weapon}-button`).classList.add("selected");
   if (selectedWeapon !== "") {
     document
@@ -208,10 +209,12 @@ const fight = () => {
 
         changeWeapons(computerChoice, selectedWeapon);
 
-        const fightButton = document.getElementById("fight");
-        fightButton.innerHTML = "Continue";
-        fightButton.disabled = false;
-        fightButton.onclick = nextRound;
+        if (checkWin() === 0) {
+          const fightButton = document.getElementById("fight");
+          fightButton.innerHTML = "Continue";
+          fightButton.disabled = false;
+          fightButton.onclick = nextRound;
+        }
       }, 1000);
     }, 1000);
   }, 1000);
@@ -233,16 +236,25 @@ const fight = () => {
   document.getElementById("fight").disabled = true;
 };
 
-/* Computer spinning */
-window.addEventListener(
-  "scroll",
-  () => {
-    document.body.style.setProperty(
-      "--scroll",
-      (window.pageYOffset * 100) /
-        (document.body.offsetHeight - window.innerHeight)
-    );
-    console.log(document.body.style.getPropertyValue("--scroll"));
-  },
-  false
-);
+const checkWin = () => {
+  // Winner returned as:
+  // 0: no winner
+  // 1: User wins
+  // 2: Computer wins
+  if (
+    weapons.user.paper === 0 &&
+    weapons.user.rocks === 0 &&
+    weapons.user.scissors === 0
+  ) {
+    alert("Computer won");
+    return 2;
+  } else if (
+    weapons.computer.paper === 0 &&
+    weapons.computer.rocks === 0 &&
+    weapons.computer.scissors === 0
+  ) {
+    alert("user won");
+    return 1;
+  }
+  return 0;
+};
