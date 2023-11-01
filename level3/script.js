@@ -258,3 +258,17 @@ const checkWin = () => {
   }
   return 0;
 };
+
+/* Computer spinning */
+window.addEventListener(
+  "scroll",
+  () => {
+    document.body.style.setProperty(
+      "--scroll",
+      (window.pageYOffset * 100) /
+        (document.body.offsetHeight - window.innerHeight)
+    );
+    console.log(document.body.style.getPropertyValue("--scroll"));
+  },
+  false
+);
