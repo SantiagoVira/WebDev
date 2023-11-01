@@ -11,7 +11,7 @@ const weapons = {
     scissors: 5,
   },
   user: {
-    rocks: 0,
+    rocks: 5,
     paper: 5,
     scissors: 5,
   },
